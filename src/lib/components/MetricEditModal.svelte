@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { Button, Input, Label, Modal, Spinner } from 'flowbite-svelte';
 
-	export let modalTitle = 'Add Game';
+	export let modalTitle = 'Edit Metric';
 	export let show = false;
 	export let processing = false;
-	export let gameTitle = '';
-	export let gameDescription = '';
-	export let handleSubmit: (a: string, b: string) => void;
+	export let handleSubmit: (a: string, b: string, c: string) => void;
+	export let metricName = '';
+	export let metricUnit = '';
+	export let metricDescription = '';
 
 	function handleFormSubmit(event: SubmitEvent) {
 		event.preventDefault();
-		handleSubmit(gameTitle, gameDescription);
+		handleSubmit(metricName, metricUnit, metricDescription);
 	}
 </script>
 
@@ -20,13 +21,23 @@
 	{:else}
 		<form class="flex flex-col space-y-5" action="#" onsubmit={handleFormSubmit}>
 			<div>
-				<Label for="title" class="mb-2">Title</Label>
+				<Label for="name" class="mb-2">Name</Label>
 				<Input
 					type="text"
-					id="title"
-					placeholder="Europe Truck Simulator 2"
+					id="name"
+					placeholder="Speeding"
 					required
-					bind:value={gameTitle}
+					bind:value={metricName}
+				/>
+			</div>
+			<div>
+				<Label for="unit" class="mb-2">Unit</Label>
+				<Input
+					type="text"
+					id="unit"
+					placeholder="time(s)"
+					required
+					bind:value={metricUnit}
 				/>
 			</div>
 			<div>
@@ -34,9 +45,9 @@
 				<Input
 					type="text"
 					id="description"
-					placeholder="Driving simulator, 3D, driving, simulator"
+					placeholder="time(s) of over speed"
 					required
-					bind:value={gameDescription}
+					bind:value={metricDescription}
 				/>
 			</div>
 			<div>

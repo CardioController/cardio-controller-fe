@@ -63,12 +63,13 @@
 		</div>
 		<Heading tag="h2">{gameData.description}</Heading>
 		<Hr />
-		<GameMetricsTable metrics={gameData.expand.metrics_via_game} />
+		<GameMetricsTable metrics={gameData.expand.metrics_via_game} gameId={gameData.id} />
 		<Hr />
 		<GameSessionsTabel sessions={gameData.expand.sessions_via_game} />
 	</div>
 
 	<GameEditModal
+		modalTitle="Edit Game"
 		gameTitle={gameData.title}
 		gameDescription={gameData.description}
 		handleSubmit={handleEditGame}
