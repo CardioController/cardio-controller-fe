@@ -42,8 +42,6 @@
 		};
 		const result = await cc_pb.collection(PB_COLLECTION_GAMES).update(gameData.id, data);
 		location.reload();
-
-		// editSubmitting = false;
 	}
 </script>
 

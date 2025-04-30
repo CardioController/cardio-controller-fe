@@ -138,7 +138,7 @@
 
 <Modal title="Delete Metric" bind:open={showDeleteModal}>
 	{#if processingSubmit}
-		<Spinner />&nbsp;Submitting...
+		<Spinner />&nbsp;Deleting...
 	{:else}
 		<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
 			Metric about to delete: <strong>{deletingMetricName}</strong>

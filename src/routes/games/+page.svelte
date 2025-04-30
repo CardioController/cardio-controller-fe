@@ -18,8 +18,6 @@
 	let games: any = $state([]);
 	let showAddModal: boolean = $state(false);
 
-	// let newGameTitle: string = $state('');
-	// let newGameDescription: string = $state('');
 	let newGameSubmitting: boolean = $state(false);
 
 	async function GetGames() {
@@ -44,10 +42,7 @@
 		};
 
 		const result = await cc_pb.collection(PB_COLLECTION_GAMES).create(data);
-		// console.log(result);
 		goto(`/games/edit?id=${result.id}`);
-
-		// newGameSubmitting = false;
 	}
 </script>
 
@@ -61,8 +56,6 @@
 		<Button
 			on:click={() => {
 				showAddModal = true;
-				// newGameTitle = '';
-				// newGameDescription = '';
 			}}>New Game</Button
 		>
 	</div>
