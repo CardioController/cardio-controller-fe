@@ -1,7 +1,6 @@
-import { PUBLIC_PB_ADDR } from '$env/static/public';
 import PocketBase from 'pocketbase';
 
-export const cc_pb = new PocketBase(PUBLIC_PB_ADDR);
+export const cc_pb = new PocketBase('/');
 
 export const PB_COLLECTION_USERS = 'users';
 export const PB_COLLECTION_EXERCISES = 'exercises';

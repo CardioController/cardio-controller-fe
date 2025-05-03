@@ -130,7 +130,7 @@
 					showEditStageModal = true;
 				}}>Set Stage</Button
 			>
-			<Button>Set Gameplay Event</Button>
+			<Button href={`/sessions/set_metric_event?id=${sessionId}`}>Set Gameplay Event</Button>
 		</div>
 
 		<Hr />

@@ -64,7 +64,8 @@
 		};
 		await cc_pb.collection(PB_COLLECTION_EXERCISES).update(editingExerciseId, data);
 
-		location.reload();
+		// location.reload();
+		GetExercises();
 	}
 
 	async function handleCreateModal() {
@@ -76,7 +77,8 @@
 		};
 		await cc_pb.collection(PB_COLLECTION_EXERCISES).create(data);
 
-		location.reload();
+		// location.reload();
+		GetExercises();
 	}
 
 	// delete modal
@@ -88,7 +90,8 @@
 	async function handleConfirmDelete() {
 		deleteModalProcessing = true;
 		await cc_pb.collection(PB_COLLECTION_EXERCISES).delete(deletingExerciseId);
-		location.reload();
+		// location.reload();
+		GetExercises();
 	}
 </script>
 
@@ -203,8 +206,8 @@
 			Exercise about to delete: <strong>{deletingExerciseName}</strong>
 		</p>
 		<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-			Deleted exercise are not recoverable, if sessions have events related to this exercise, the name
-			will be empty.
+			Deleted exercise are not recoverable, if sessions have events related to this exercise, the
+			name will be empty.
 		</p>
 		<Hr />
 		<div>

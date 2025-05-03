@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import SessionsTable from '$lib/components/SessionsTable.svelte';
 	import { cc_pb, PB_COLLECTION_GAMES, PB_COLLECTION_SESSIONS } from '$lib/pb-integrate';
 	import {
 		Button,
@@ -7,17 +8,9 @@
 		Hr,
 		Label,
 		Modal,
-		Radio,
 		Select,
 		Spinner,
-		Table,
-		TableBody,
-		TableBodyCell,
-		TableBodyRow,
-		TableHead,
-		TableHeadCell
 	} from 'flowbite-svelte';
-	import { ArchiveOutline, HeartOutline, RocketOutline } from 'flowbite-svelte-icons';
 
 	let sessions: any = $state([]);
 
@@ -99,37 +92,7 @@
 </div>
 
 {#key sessions}
-	<Table>
-		<TableHead>
-			<TableHeadCell>Create at</TableHeadCell>
-			<TableHeadCell>Stage</TableHeadCell>
-			<TableHeadCell>Game</TableHeadCell>
-			<TableHeadCell>Operation</TableHeadCell>
-		</TableHead>
-		<TableBody tableBodyClass="divide-y">
-			{#each sessions.items as s}
-				<TableBodyRow>
-					<TableBodyCell>{s.created.split(' ')[0]}</TableBodyCell>
-					<TableBodyCell>
-						<div class="flex gap-x-2">
-							{#if s.stage == 'game'}
-								<RocketOutline color="blue" />
-							{:else if s.stage == 'exercise'}
-								<HeartOutline color="red" />
-							{:else if s.stage == 'finished'}
-								<ArchiveOutline />
-							{/if}
-							{s.stage}
-						</div>
-					</TableBodyCell>
-					<TableBodyCell>{s.expand.game.title}</TableBodyCell>
-					<TableBodyCell>
-						<Button color="blue" href={`/sessions/view?id=${s.id}`}>View</Button>
-					</TableBodyCell>
-				</TableBodyRow>
-			{/each}
-		</TableBody>
-	</Table>
+	<SessionsTable bind:sessions />
 {/key}
 
 <Modal title="New Session" bind:open={showAddSessionModal}>
