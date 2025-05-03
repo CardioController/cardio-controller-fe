@@ -123,15 +123,18 @@
 						</div>
 					</TableBodyCell>
 					<TableBodyCell>{s.expand.game.title}</TableBodyCell>
-					<TableBodyCell
-						><Button
+					<TableBodyCell>
+						<Button
 							on:click={() => {
 								editingSessionId = s.id;
 								modalStageValue = s.stage;
 								showEditStageModal = true;
-							}}>Set Stage</Button
-						></TableBodyCell
-					>
+							}}
+						>
+							Set Stage
+						</Button>
+						<Button color="blue" href={`/sessions/view?id=${s.id}`}>View</Button>
+					</TableBodyCell>
 				</TableBodyRow>
 			{/each}
 		</TableBody>

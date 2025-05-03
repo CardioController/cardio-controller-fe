@@ -10,3 +10,7 @@ export const PB_COLLECTION_METRICS = 'metrics';
 export const PB_COLLECTION_SESSIONS = 'sessions';
 export const PB_COLLECTION_SESSION_EXERCISES = 'session_exercises';
 export const PB_COLLECTION_SESSION_METRICS = 'session_metrics';
+export const PB_COLLECTION_VIDEOS_EXERCISE = 'videos_exercise';
+export const PB_COLLECTION_VIDEOS_GAMEPLAY = 'videos_gameplay';
+
+export const PB_COLLECTION_TO_ADD_VIDEOS = 'to_add_videos';
