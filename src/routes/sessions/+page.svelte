@@ -124,15 +124,6 @@
 					</TableBodyCell>
 					<TableBodyCell>{s.expand.game.title}</TableBodyCell>
 					<TableBodyCell>
-						<Button
-							on:click={() => {
-								editingSessionId = s.id;
-								modalStageValue = s.stage;
-								showEditStageModal = true;
-							}}
-						>
-							Set Stage
-						</Button>
 						<Button color="blue" href={`/sessions/view?id=${s.id}`}>View</Button>
 					</TableBodyCell>
 				</TableBodyRow>
@@ -140,31 +131,6 @@
 		</TableBody>
 	</Table>
 {/key}
-
-<Modal title="Set Session Stage" bind:open={showEditStageModal}>
-	{#if editModalProcessing}
-		<Spinner />&nbsp;Submitting...
-	{:else}
-		<Radio name="Game" value="game" bind:group={modalStageValue}
-			><RocketOutline color="blue" />Game</Radio
-		>
-		<Radio name="Exercise" value="exercise" bind:group={modalStageValue}
-			><HeartOutline color="red" />Exercise</Radio
-		>
-		<Radio name="Finished" value="finished" bind:group={modalStageValue}
-			><ArchiveOutline />Finished</Radio
-		>
-
-		<Hr />
-		<Button on:click={handleSetSessionStage}>Save</Button>
-		<Button
-			color="alternative"
-			on:click={() => {
-				showEditStageModal = false;
-			}}>Cancel</Button
-		>
-	{/if}
-</Modal>
 
 <Modal title="New Session" bind:open={showAddSessionModal}>
 	{#if addModalProcessing}

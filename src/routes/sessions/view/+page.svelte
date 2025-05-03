@@ -9,7 +9,7 @@
 		PB_COLLECTION_VIDEOS_EXERCISE,
 		PB_COLLECTION_VIDEOS_GAMEPLAY
 	} from '$lib/pb-integrate';
-	import { Button, Heading, Hr, Spinner } from 'flowbite-svelte';
+	import { Button, Heading, Hr, Modal, Radio, Spinner } from 'flowbite-svelte';
 	import { ArchiveOutline, HeartOutline, RocketOutline } from 'flowbite-svelte-icons';
 	import type { RecordModel } from 'pocketbase';
 	import { onMount } from 'svelte';
@@ -59,21 +59,10 @@
 		getSession();
 	}
 
-	async function GamePlayVideosReOrdered(idArr: string[]) {
+	async function VideosReOrdered(idArr: string[], collectionName: string) {
 		const batch = cc_pb.createBatch();
 		idArr.forEach((v, index) => {
-			batch.collection(PB_COLLECTION_VIDEOS_GAMEPLAY).update(v, {
-				order: index
-			});
-		});
-		await batch.send();
-		getSession();
-	}
-
-	async function ExerciseVideosReOrdered(idArr: string[]) {
-		const batch = cc_pb.createBatch();
-		idArr.forEach((v, index) => {
-			batch.collection(PB_COLLECTION_VIDEOS_EXERCISE).update(v, {
+			batch.collection(collectionName).update(v, {
 				order: index
 			});
 		});
@@ -88,6 +77,20 @@
 		}
 		getSession();
 	});
+
+	// set stage modal
+	let showEditStageModal = $state(false);
+	let editModalProcessing = $state(false);
+	let modalStageValue = $state('');
+	async function handleSetSessionStage() {
+		editModalProcessing = true;
+		await cc_pb.collection(PB_COLLECTION_SESSIONS).update(sessionId, {
+			stage: modalStageValue
+		});
+		editModalProcessing = false;
+		showEditStageModal = false;
+		getSession();
+	}
 </script>
 
 <svelte:head>
@@ -116,6 +119,19 @@
 				{sessionData.stage}
 			</Heading>
 		</div>
+		<div>
+			<Heading tag="h4">Game metric state</Heading>
+			<Heading tag="h5">{sessionData.sesison_metric_stage}</Heading>
+		</div>
+		<div>
+			<Button
+				on:click={() => {
+					modalStageValue = sessionData!.stage;
+					showEditStageModal = true;
+				}}>Set Stage</Button
+			>
+			<Button>Set Gameplay Event</Button>
+		</div>
 
 		<Hr />
 		<div class="mb-5 flex">
@@ -131,7 +147,7 @@
 		</div>
 		<SessionVideoTabel
 			bind:videos={sessionData.expand!.videos_gameplay_via_session}
-			tableReordered={GamePlayVideosReOrdered}
+			tableReordered={VideosReOrdered}
 		/>
 
 		<Hr />
@@ -148,7 +164,7 @@
 		</div>
 		<SessionVideoTabel
 			bind:videos={sessionData.expand!.videos_exercise_via_session}
-			tableReordered={ExerciseVideosReOrdered}
+			tableReordered={VideosReOrdered}
 		/>
 	{/if}
 {/key}
@@ -160,3 +176,28 @@
 	bind:collection={addVideoCollection}
 	addVideosCallback={addVideoCallbackFunc}
 />
+
+<Modal title="Set Session Stage" bind:open={showEditStageModal}>
+	{#if editModalProcessing}
+		<Spinner />&nbsp;Submitting...
+	{:else}
+		<Radio name="Game" value="game" bind:group={modalStageValue}
+			><RocketOutline color="blue" />Game</Radio
+		>
+		<Radio name="Exercise" value="exercise" bind:group={modalStageValue}
+			><HeartOutline color="red" />Exercise</Radio
+		>
+		<Radio name="Finished" value="finished" bind:group={modalStageValue}
+			><ArchiveOutline />Finished</Radio
+		>
+
+		<Hr />
+		<Button on:click={handleSetSessionStage}>Save</Button>
+		<Button
+			color="alternative"
+			on:click={() => {
+				showEditStageModal = false;
+			}}>Cancel</Button
+		>
+	{/if}
+</Modal>

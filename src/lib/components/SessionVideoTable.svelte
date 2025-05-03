@@ -9,11 +9,15 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-	import { AngleDownOutline, AngleUpOutline } from 'flowbite-svelte-icons';
+	import { AngleDownOutline, AngleUpOutline, TicketOutline } from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
 	import { PB_COLLECTION_VIDEOS_EXERCISE, PB_COLLECTION_VIDEOS_GAMEPLAY } from '$lib/pb-integrate';
+	import VideoViewModal from './VideoViewModal.svelte';
 
-	let { videos = $bindable(), tableReordered = $bindable<(idArr: string[]) => void>() } = $props();
+	let {
+		videos = $bindable(),
+		tableReordered = $bindable<(idArr: string[], collectionName: string) => void>()
+	} = $props();
 	let showVideoModal = $state(false);
 	let videoModalVideoPath = $state('');
 	let maxOrder = $state(0);
@@ -37,7 +41,7 @@
 		// console.log('Spliced: ', ids);
 		ids.splice(index - 1, 0, video.id);
 		// console.log('Inserted: ', ids);
-		tableReordered(ids);
+		tableReordered(ids, video.collectionName);
 	}
 
 	async function handleSortDown(video: any) {
@@ -50,7 +54,7 @@
 		// console.log('Spliced: ', ids);
 		ids.splice(index + 1, 0, video.id);
 		// console.log('Inserted: ', ids);
-		tableReordered(ids);
+		tableReordered(ids, video.collectionName);
 	}
 </script>
 
@@ -108,9 +112,4 @@
 	</TableBody>
 </Table>
 
-<Modal bind:open={showVideoModal} bind:title={videoModalVideoPath}>
-	<video controls height="540" width="860" id="video">
-		<source title={'video file'} src={`${videoModalVideoPath}`} type="video/mp4" />
-		<track kind="captions" />
-	</video>
-</Modal>
+<VideoViewModal bind:open={showVideoModal} bind:videoPath={videoModalVideoPath} />

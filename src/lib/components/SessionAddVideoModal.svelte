@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { cc_pb } from '$lib/pb-integrate';
+	import {
+		cc_pb,
+		PB_COLLECTION_VIDEOS_EXERCISE,
+		PB_COLLECTION_VIDEOS_GAMEPLAY
+	} from '$lib/pb-integrate';
 	import {
 		Button,
 		Checkbox,
@@ -12,6 +16,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import VideoViewModal from './VideoViewModal.svelte';
 
 	let { open = $bindable(), collection = $bindable(), addVideosCallback = $bindable() } = $props();
 	let videos: any = $state([]);
@@ -36,15 +41,17 @@
 		}
 	}
 
-	// $inspect(selectedList);
-	// $inspect(videos);
-
 	$effect(() => {
 		if (open) {
 			selectedList = [];
 			getVideos();
 		}
 	});
+
+	// preview video modal
+
+	let showVideoModal = $state(false);
+	let videoModalVideoPath = $state('');
 </script>
 
 <Modal title="Add Video" bind:open>
@@ -53,6 +60,7 @@
 			<TableHeadCell>Select</TableHeadCell>
 			<TableHeadCell>File Path</TableHeadCell>
 			<TableHeadCell>Created</TableHeadCell>
+			<TableHeadCell>Preview</TableHeadCell>
 		</TableHead>
 		<TableBody tableBodyClass="divide-y">
 			{#key videos}
@@ -72,6 +80,21 @@
 						</TableBodyCell>
 						<TableBodyCell>{v.file_source_path}</TableBodyCell>
 						<TableBodyCell>{v.created}</TableBodyCell>
+						<TableBodyCell>
+							<Button
+								color="blue"
+								on:click={() => {
+									videoModalVideoPath = '';
+									if (v.collectionName == PB_COLLECTION_VIDEOS_EXERCISE) {
+										videoModalVideoPath += '/exercise_vid/';
+									} else if (v.collectionName == PB_COLLECTION_VIDEOS_GAMEPLAY) {
+										videoModalVideoPath += '/gameplay_vid/';
+									}
+									videoModalVideoPath += v.file_source_path;
+									showVideoModal = true;
+								}}>Preview</Button
+							>
+						</TableBodyCell>
 					</TableBodyRow>
 				{/each}
 			{/key}
@@ -91,3 +114,5 @@
 		}}>Cancel</Button
 	>
 </Modal>
+
+<VideoViewModal bind:open={showVideoModal} bind:videoPath={videoModalVideoPath} />
