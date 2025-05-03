@@ -8,10 +8,11 @@
 	import { Button, Heading, Hr } from 'flowbite-svelte';
 	import { onMount } from 'svelte';
 
+	let gameId: string | null;
 	let gameData: any = $state(null);
 
-	async function GetGame(id: string) {
-		const result = await cc_pb.collection(PB_COLLECTION_GAMES).getOne(id, {
+	async function GetGame() {
+		const result = await cc_pb.collection(PB_COLLECTION_GAMES).getOne(gameId!, {
 			expand: 'metrics_via_game,sessions_via_game'
 		});
 		if (result == null) {
@@ -22,12 +23,12 @@
 	}
 
 	onMount(() => {
-		let idStr = page.url.searchParams.get('id');
-		if (idStr == null || idStr.length == 0) {
+		gameId = page.url.searchParams.get('id');
+		if (gameId == null || gameId.length == 0) {
 			goto('/games');
 			return;
 		}
-		GetGame(idStr!);
+		GetGame();
 	});
 
 	let showModal: boolean = $state(false);
@@ -41,7 +42,7 @@
 			description
 		};
 		const result = await cc_pb.collection(PB_COLLECTION_GAMES).update(gameData.id, data);
-		location.reload();
+		GetGame();
 	}
 </script>
 
@@ -61,7 +62,11 @@
 		</div>
 		<Heading tag="h2">{gameData.description}</Heading>
 		<Hr />
-		<GameMetricsTable metrics={gameData.expand.metrics_via_game} gameId={gameData.id} />
+		<GameMetricsTable
+			metrics={gameData.expand.metrics_via_game}
+			gameId={gameData.id}
+			metricsChanged={GetGame}
+		/>
 		<Hr />
 		<GameSessionsTabel sessions={gameData.expand.sessions_via_game} />
 	</div>

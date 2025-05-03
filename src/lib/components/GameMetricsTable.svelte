@@ -34,7 +34,10 @@
 			game: props.gameId
 		};
 		await cc_pb.collection(PB_COLLECTION_METRICS).create(data);
-		location.reload();
+
+		await props.metricsChanged();
+		showModal = false;
+		processingSubmit = false;
 	}
 
 	async function handleEditMetric(name: string, unit: string, description: string) {
@@ -46,7 +49,9 @@
 		};
 		await cc_pb.collection(PB_COLLECTION_METRICS).update(metricEditingId, data);
 
-		location.reload();
+		await props.metricsChanged();
+		showModal = false;
+		processingSubmit = false;
 	}
 
 	let modalHandleFunc = $state(handleCreateMetric);
@@ -61,7 +66,10 @@
 		deleteProcessing = true;
 		await cc_pb.collection(PB_COLLECTION_METRICS).delete(deletingMetricId);
 
-		location.reload();
+		props.metricsChanged();
+		await props.metricsChanged();
+		showDeleteModal = false;
+		deleteProcessing = false;
 	}
 </script>
 
