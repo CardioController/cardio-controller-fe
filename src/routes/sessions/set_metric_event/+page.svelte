@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { cc_pb, PB_COLLECTION_SESSIONS } from '$lib/pb-integrate';
+	import MetricEditModal from '$lib/components/MetricEditModal.svelte';
+	import {
+		cc_pb,
+		PB_COLLECTION_GAMEPLAY_METRIC_EVENTS,
+		PB_COLLECTION_SESSIONS
+	} from '$lib/pb-integrate';
 	import {
 		Button,
 		Card,
-		Checkbox,
 		Heading,
 		Hr,
 		Table,
@@ -29,7 +33,6 @@
 			expand:
 				'game,videos_gameplay_via_session,game.metrics_via_game,videos_gameplay_via_session.gameplay_metric_events_via_video_gameplay,videos_gameplay_via_session.gameplay_metric_events_via_video_gameplay.metric'
 		});
-		console.log(sessionData);
 	}
 
 	onMount(() => {
@@ -40,8 +43,49 @@
 		getSession();
 	});
 
-	async function handleAddMetric(metric: RecordModel) {}
-	async function handleDeleteMetric(metricEvent: RecordModel) {}
+	$effect(() => {
+		processingVideo;
+		if (processingVideo != undefined) {
+			videoEvents = processingVideo.expand!.gameplay_metric_events_via_video_gameplay;
+		}
+	});
+
+	$effect(() => {
+		videoEvents;
+		videoEvents?.sort((a, b) => {
+			return a.time - b.time;
+		});
+	});
+
+	async function handleAddMetric(metric: any) {
+		console.log('Metrid Name: ', metric.name);
+		let timeStamp = (document.getElementById('video') as HTMLVideoElement).currentTime;
+
+		let created = await cc_pb.collection(PB_COLLECTION_GAMEPLAY_METRIC_EVENTS).create(
+			{
+				video_gameplay: processingVideo!.id,
+				metric: metric.id,
+				time: timeStamp
+			},
+			{
+				expand: 'metric'
+			}
+		);
+		// console.log(created);
+		videoEvents?.push(created);
+	}
+	async function handleDeleteMetric(metricEvent: any) {
+		// console.log(metricEvent);
+		console.log(metricEvent.time);
+		await cc_pb.collection(PB_COLLECTION_GAMEPLAY_METRIC_EVENTS).delete(metricEvent.id);
+		const indx = videoEvents?.indexOf(metricEvent);
+		videoEvents?.splice(indx!, 1);
+		videoEvents = videoEvents;
+	}
+	async function handleSeek(metricEvent: any) {
+		let videoElement = document.getElementById('video') as HTMLVideoElement;
+		videoElement.currentTime = metricEvent.time;
+	}
 </script>
 
 <svelte:head>
@@ -66,7 +110,11 @@
 		<!-- {processingVideo.id} -->
 		<div class="grid grid-cols-2 gap-x-2">
 			<video controls height="540" width="860" id="video">
-				<source title={'video file'} src={`${processingVideo.file_source_path}`} type="video/mp4" />
+				<source
+					title={'video file'}
+					src={`/gameplay_vid/${processingVideo.file_source_path}`}
+					type="video/mp4"
+				/>
 				<track kind="captions" />
 			</video>
 
@@ -74,24 +122,40 @@
 				<Heading tag="h3">Metrics</Heading>
 				<div class="grid grid-cols-4">
 					{#each sessionData?.expand?.game.expand?.metrics_via_game as m}
-						<Button size="lg">{m.name} + 1</Button>
+						<Button
+							size="lg"
+							on:click={() => {
+								handleAddMetric(m);
+							}}>{m.name} + 1</Button
+						>
 					{/each}
 				</div>
 			</Card>
 		</div>
-		<div class="mt-5 flex flex-row overflow-x-auto">
-			{#each processingVideo.expand!.gameplay_metric_events_via_video_gameplay as e}
-				<Card>
-					<Heading tag="h6">{e.expand.metric.name}</Heading>
-					{e.time}
-					<Hr />
-					<div>
-						<Button>Seek</Button>
-						<Button color="alternative">Delete</Button>
-					</div>
-				</Card>
-			{/each}
-		</div>
+		{#key videoEvents}
+			<div class="mt-5 flex flex-row gap-x-2 overflow-x-auto border-2 p-2">
+				{#each processingVideo.expand!.gameplay_metric_events_via_video_gameplay as e}
+					<Card size="md" class=" min-w-60">
+						<Heading tag="h6">{e.expand.metric.name}</Heading>
+						{e.time}
+						<Hr />
+						<div>
+							<Button
+								on:click={() => {
+									handleSeek(e);
+								}}>Seek</Button
+							>
+							<Button
+								color="alternative"
+								on:click={() => {
+									handleDeleteMetric(e);
+								}}>Delete</Button
+							>
+						</div>
+					</Card>
+				{/each}
+			</div>
+		{/key}
 	{/if}
 {/key}
 
