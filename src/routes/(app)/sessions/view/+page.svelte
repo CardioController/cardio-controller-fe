@@ -91,6 +91,13 @@
 		showEditStageModal = false;
 		getSession();
 	}
+
+	async function handleMarkReadyForRender() {
+		await cc_pb.collection(PB_COLLECTION_SESSIONS).update(sessionId, {
+			video_process_stage: 'in_queue'
+		});
+		getSession();
+	}
 </script>
 
 <svelte:head>
@@ -119,10 +126,12 @@
 				{sessionData.stage}
 			</Heading>
 		</div>
+
 		<div>
 			<Heading tag="h4">Game metric state</Heading>
-			<Heading tag="h5">{sessionData.sesison_metric_stage}</Heading>
+			<Heading tag="h5">{'['}{sessionData.session_metric_stage}{']'}</Heading>
 		</div>
+
 		<div>
 			<Button
 				on:click={() => {
@@ -132,6 +141,17 @@
 			>
 			<Button href={`/sessions/set_metric_event?id=${sessionId}`}>Set Gameplay Event</Button>
 		</div>
+
+		{#if sessionData.session_metric_stage == 'finished'}
+			<Hr />
+			<div class="gap-y-2">
+				{#if sessionData.video_process_stage == '' || sessionData.video_process_stage == 'idle'}
+					<Button on:click={handleMarkReadyForRender}>Mark Ready For Render</Button>
+				{/if}
+				<Heading tag="h4">Video Process Stage</Heading>
+				<Heading tag="h5">{'['}{sessionData.video_process_stage}{']'}</Heading>
+			</div>
+		{/if}
 
 		<Hr />
 		<div class="mb-5 flex">

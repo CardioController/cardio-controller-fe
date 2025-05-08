@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import MetricEditModal from '$lib/components/MetricEditModal.svelte';
 	import {
 		cc_pb,
 		PB_COLLECTION_GAMEPLAY_METRIC_EVENTS,
@@ -80,7 +79,6 @@
 		await cc_pb.collection(PB_COLLECTION_GAMEPLAY_METRIC_EVENTS).delete(metricEvent.id);
 		const indx = videoEvents?.indexOf(metricEvent);
 		videoEvents?.splice(indx!, 1);
-		videoEvents = videoEvents;
 	}
 	async function handleSeek(metricEvent: any) {
 		let videoElement = document.getElementById('video') as HTMLVideoElement;
@@ -120,6 +118,11 @@
 
 			<Card size="xl" class="gap-y-2">
 				<Heading tag="h3">Metrics</Heading>
+				<div>
+					<Button size="lg">Start</Button>
+					<Button size="lg">End</Button>
+				</div>
+				<Hr />
 				<div class="grid grid-cols-4">
 					{#each sessionData?.expand?.game.expand?.metrics_via_game as m}
 						<Button
@@ -135,7 +138,7 @@
 		{#key videoEvents}
 			<div class="mt-5 flex flex-row gap-x-2 overflow-x-auto border-2 p-2">
 				{#each processingVideo.expand!.gameplay_metric_events_via_video_gameplay as e}
-					<Card size="md" class=" min-w-60">
+					<Card size="md" class="w-60 max-w-60 min-w-60">
 						<Heading tag="h6">{e.expand.metric.name}</Heading>
 						{e.time}
 						<Hr />

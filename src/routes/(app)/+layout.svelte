@@ -10,7 +10,7 @@
 		NavLi,
 		NavUl
 	} from 'flowbite-svelte';
-	import '../app.css';
+	import '../../app.css';
 	import { cc_pb } from '$lib/pb-integrate';
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
