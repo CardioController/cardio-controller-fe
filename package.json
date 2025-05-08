@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --host=0.0.0.0",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -40,6 +40,7 @@
 		"vitest": "^3.0.0"
 	},
 	"dependencies": {
+		"@fontsource-variable/noto-sans": "^5.2.7",
 		"pocketbase": "^0.26.0"
 	}
 }

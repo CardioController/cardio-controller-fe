@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import '@fontsource-variable/noto-sans';
+
 	let debug = $state(false);
 	let positionStyle = $state('');
 	let information = $state('');
@@ -49,6 +51,15 @@
 
 <div class="fixed flex h-full w-full items-center justify-center">
 	<div class="flex h-[1080px] w-[1920px] p-10 {positionStyle}">
-		<pre class="text-5xl">{information}</pre>
+		<div class="p-10 bg-black/50 rounded-4xl">
+			<pre class="text-4xl text-white">{information}</pre>
+		</div>
 	</div>
 </div>
+
+<style>
+	pre {
+		font-family: 'Noto Sans Variable', sans-serif;
+		font-weight: 900;
+	}
+</style>
