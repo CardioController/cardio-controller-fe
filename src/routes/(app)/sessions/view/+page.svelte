@@ -14,7 +14,7 @@
 	import type { RecordModel } from 'pocketbase';
 	import { onMount } from 'svelte';
 
-	let sessionId = page.url.searchParams.get('id') ?? '';
+	let sessionId = $state('');
 	let sessionData: RecordModel | undefined = $state();
 
 	let showAddVideoModal = $state(false);
@@ -71,6 +71,7 @@
 	}
 
 	onMount(() => {
+		sessionId = page.url.searchParams.get('id') ?? '';
 		if (sessionId.length == 0) {
 			goto('/sessions');
 			return;
