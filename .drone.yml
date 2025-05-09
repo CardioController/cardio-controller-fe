@@ -1,9 +1,9 @@
 kind: pipeline
 type: docker
 
-# # This is optinoal
-# clone:
-#   disable: true
+# This is optinoal
+clone:
+  disable: true
 
 steps:
   - name: clone trigger drone build repo
