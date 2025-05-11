@@ -140,7 +140,6 @@
 					showEditStageModal = true;
 				}}>Set Stage</Button
 			>
-			<Button href={`/sessions/set_metric_event?id=${sessionId}`}>Set Gameplay Event</Button>
 		</div>
 
 		{#if sessionData.session_metric_stage == 'finished'}
@@ -155,16 +154,22 @@
 		{/if}
 
 		<Hr />
-		<div class="mb-5 flex">
+		<div class="mb-5 flex items-baseline justify-baseline">
+			<RocketOutline color="blue" />
 			<Heading tag="h4" class="text-gray-500">Game play footage</Heading>
-			<Button
-				on:click={() => {
-					addVideoCollection = PB_COLLECTION_VIDEOS_GAMEPLAY;
-					showAddVideoModal = true;
-				}}
-			>
-				Add video
-			</Button>
+			<div class="flex items-center justify-center gap-x-2">
+				<Button
+					on:click={() => {
+						addVideoCollection = PB_COLLECTION_VIDEOS_GAMEPLAY;
+						showAddVideoModal = true;
+					}}
+				>
+					Add video
+				</Button>
+				<Button href={`/sessions/set_metric_event?id=${sessionId}`} color="blue"
+					>Set Gameplay Event</Button
+				>
+			</div>
 		</div>
 		<SessionVideoTabel
 			bind:videos={sessionData.expand!.videos_gameplay_via_session}
@@ -172,16 +177,22 @@
 		/>
 
 		<Hr />
-		<div class="mb-5 flex">
+		<div class="mb-5 flex items-baseline justify-baseline">
+			<HeartOutline color="red" />
 			<Heading tag="h4" class="text-gray-500">Game exercise footage</Heading>
-			<Button
-				on:click={() => {
-					addVideoCollection = PB_COLLECTION_VIDEOS_EXERCISE;
-					showAddVideoModal = true;
-				}}
-			>
-				Add video
-			</Button>
+			<div class="flex items-center justify-center gap-x-2">
+				<Button
+					on:click={() => {
+						addVideoCollection = PB_COLLECTION_VIDEOS_EXERCISE;
+						showAddVideoModal = true;
+					}}
+				>
+					Add video
+				</Button>
+				<Button href={`/sessions/set_exercise_event?id=${sessionId}`} color="blue"
+					>Set Exercise Event</Button
+				>
+			</div>
 		</div>
 		<SessionVideoTabel
 			bind:videos={sessionData.expand!.videos_exercise_via_session}
