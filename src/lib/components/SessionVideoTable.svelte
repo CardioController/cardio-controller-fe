@@ -13,18 +13,21 @@
 	import { onMount } from 'svelte';
 	import { PB_COLLECTION_VIDEOS_EXERCISE, PB_COLLECTION_VIDEOS_GAMEPLAY } from '$lib/pb-integrate';
 	import VideoViewModal from './VideoViewModal.svelte';
+	import type { RecordModel } from 'pocketbase';
 
 	let {
+		selectedId = $bindable(),
+		selectVideo = $bindable<(id: RecordModel) => void>(),
 		videos = $bindable(),
-		tableReordered = $bindable<(idArr: string[], collectionName: string) => void>()
+		tableReordered = $bindable<(idArr: string[]) => void>()
 	} = $props();
 	let showVideoModal = $state(false);
 	let videoModalVideoPath = $state('');
-	let maxOrder = $state(0);
+	// let maxOrder = $state(0);
 
 	onMount(() => {
-		if (videos != null) {
-			maxOrder = videos.length - 1;
+		if (videos != undefined) {
+			// maxOrder = videos.length - 1;
 			videos.sort((a: any, b: any) => {
 				return a.order - b.order;
 			});
@@ -41,7 +44,7 @@
 		// console.log('Spliced: ', ids);
 		ids.splice(index - 1, 0, video.id);
 		// console.log('Inserted: ', ids);
-		tableReordered(ids, video.collectionName);
+		tableReordered(ids);
 	}
 
 	async function handleSortDown(video: any) {
@@ -54,21 +57,42 @@
 		// console.log('Spliced: ', ids);
 		ids.splice(index + 1, 0, video.id);
 		// console.log('Inserted: ', ids);
-		tableReordered(ids, video.collectionName);
+		tableReordered(ids);
 	}
 </script>
 
 <Table>
 	<TableHead>
+		{#if selectVideo != undefined}
+			<TableHeadCell>Select</TableHeadCell>
+		{/if}
 		<TableHeadCell>Path</TableHeadCell>
 		<TableHeadCell>Order</TableHeadCell>
 		<TableHeadCell>Sort</TableHeadCell>
+		{#if videos.length > 0 && videos[0].collectionName == PB_COLLECTION_VIDEOS_GAMEPLAY}
+			<TableHeadCell>Events Count</TableHeadCell>
+		{/if}
 		<TableHeadCell>Operation</TableHeadCell>
 	</TableHead>
 	<TableBody tableBodyClass="divide-y">
 		{#key videos}
 			{#each videos as v}
 				<TableBodyRow>
+					{#if selectVideo != undefined}
+						<TableBodyCell>
+							{#if selectedId != undefined && selectedId == v.id}
+								<Button disabled color="blue">Selected</Button>
+							{:else}
+								<Button
+									on:click={() => {
+										// selectedId = v;
+										selectVideo(v);
+										// console.log(v);
+									}}>Select</Button
+								>
+							{/if}
+						</TableBodyCell>
+					{/if}
 					<TableBodyCell>{v.file_source_path}</TableBodyCell>
 					<TableBodyCell>{v.order}</TableBodyCell>
 					<TableBodyCell>
@@ -81,7 +105,7 @@
 							<AngleUpOutline />
 						</Button>
 						<Button
-							disabled={v.order == maxOrder}
+							disabled={videos.length == 0 || v.order >= videos.length - 1}
 							on:click={() => {
 								handleSortDown(v);
 							}}
@@ -89,6 +113,14 @@
 							<AngleDownOutline />
 						</Button>
 					</TableBodyCell>
+
+					{#if videos.length > 0 && videos[0].collectionName == PB_COLLECTION_VIDEOS_GAMEPLAY}
+						<TableBodyCell
+							>{v.expand.gameplay_metric_events_via_video_gameplay == null
+								? 0
+								: v.expand.gameplay_metric_events_via_video_gameplay.length}</TableBodyCell
+						>
+					{/if}
 					<TableBodyCell>
 						<Button
 							color="blue"

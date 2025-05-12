@@ -66,6 +66,8 @@
 
 		// location.reload();
 		GetExercises();
+		showEditModal = false;
+		editModalProcessing = false;
 	}
 
 	async function handleCreateModal() {
@@ -79,6 +81,8 @@
 
 		// location.reload();
 		GetExercises();
+		showEditModal = false;
+		editModalProcessing = false;
 	}
 
 	// delete modal
@@ -92,8 +96,14 @@
 		await cc_pb.collection(PB_COLLECTION_EXERCISES).delete(deletingExerciseId);
 		// location.reload();
 		GetExercises();
+		showDeleteModal = false;
+		deleteModalProcessing = false;
 	}
 </script>
+
+<svelte:head>
+	<title>Exercises | Cardio Controller</title>
+</svelte:head>
 
 <div class="mb-10 grid grid-cols-2">
 	<Heading>Exercise</Heading>

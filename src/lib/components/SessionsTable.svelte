@@ -19,6 +19,7 @@
 			<TableHeadCell>Create at</TableHeadCell>
 			<TableHeadCell>Stage</TableHeadCell>
 			<TableHeadCell>Game</TableHeadCell>
+			<TableHeadCell>Video Stage</TableHeadCell>
 			<TableHeadCell>Operation</TableHeadCell>
 		</TableHead>
 		<TableBody tableBodyClass="divide-y">
@@ -39,7 +40,11 @@
 					</TableBodyCell>
 					<TableBodyCell>{s.expand.game.title}</TableBodyCell>
 					<TableBodyCell>
+						{s.video_process_stage}
+					</TableBodyCell>
+					<TableBodyCell>
 						<Button color="blue" href={`/sessions/view?id=${s.id}`}>View</Button>
+						<Button href={`/sessions/edit?id=${s.id}`}>Edit</Button>
 					</TableBodyCell>
 				</TableBodyRow>
 			{/each}

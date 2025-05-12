@@ -13,7 +13,7 @@
 		toAddGameplayVid = result.gameplay_vid;
 
 		sessions = await cc_pb.collection(PB_COLLECTION_SESSIONS).getList(1, 100, {
-			filter: 'stage!="finished"',
+			filter: 'stage!="finished" || video_process_stage !="finished"',
 			expand: 'game',
 			sort: '-created'
 		});

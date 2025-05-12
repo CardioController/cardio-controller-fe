@@ -2,15 +2,7 @@
 	import { page } from '$app/state';
 	import SessionsTable from '$lib/components/SessionsTable.svelte';
 	import { cc_pb, PB_COLLECTION_GAMES, PB_COLLECTION_SESSIONS } from '$lib/pb-integrate';
-	import {
-		Button,
-		Heading,
-		Hr,
-		Label,
-		Modal,
-		Select,
-		Spinner,
-	} from 'flowbite-svelte';
+	import { Button, Heading, Hr, Label, Modal, Select, Spinner } from 'flowbite-svelte';
 
 	let sessions: any = $state([]);
 

@@ -122,6 +122,13 @@
 		let videoElement = document.getElementById('video') as HTMLVideoElement;
 		videoElement.currentTime = time;
 	}
+
+	async function handleSetMetricProcessFinished() {
+		await cc_pb.collection(PB_COLLECTION_SESSIONS).update(sessionId, {
+			session_metric_stage: 'finished'
+		});
+		goto(`/sessions/view?id=${sessionId}`);
+	}
 </script>
 
 <svelte:head>
@@ -273,6 +280,14 @@
 						{/each}
 					</TableBody>
 				</Table>
+			</Card>
+
+			<Card size="xl" class="items-end justify-end gap-y-2">
+				<div>
+					<Button on:click={handleSetMetricProcessFinished}
+						>Set metric process stage finished</Button
+					>
+				</div>
 			</Card>
 			<!-- Video Table End -->
 			<!-- <Card size="xl" class="gap-y-2">
