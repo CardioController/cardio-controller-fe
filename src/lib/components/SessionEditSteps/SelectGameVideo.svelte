@@ -223,7 +223,7 @@
 					</div>
 				</div>
 				<!-- <Hr /> -->
-				<div class="grid grid-cols-4">
+				<div class="grid grid-cols-4 gap-x-2">
 					{#if processingVideo.start > -1}
 						{#each gameMetrics as m}
 							<Button

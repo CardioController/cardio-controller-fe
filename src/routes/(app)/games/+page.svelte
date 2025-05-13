@@ -78,7 +78,7 @@
 					<TableBodyCell
 						>{g.expand.metrics_via_game == null
 							? `0`
-							: g.expand.sessions_via_game.length}</TableBodyCell
+							: g.expand.metrics_via_game.length}</TableBodyCell
 					>
 					<TableBodyCell
 						>{g.expand.sessions_via_game == null
