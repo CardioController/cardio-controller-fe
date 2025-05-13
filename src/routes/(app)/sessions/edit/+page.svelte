@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import SelectGameVideo from '$lib/components/SessionEditSteps/SelectGameVideo.svelte';
 	import SessionExercises from '$lib/components/SessionEditSteps/SessionExercises.svelte';
+	import SessionExerciseVideo from '$lib/components/SessionEditSteps/SessionExerciseVideo.svelte';
 	import { cc_pb, PB_COLLECTION_SESSIONS } from '$lib/pb-integrate';
 	import { Button, Heading, Hr, StepIndicator, TabItem, Tabs } from 'flowbite-svelte';
 	import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons';
@@ -69,15 +70,11 @@
 				{/if}
 				Exercise videos
 			</div>
-			<p class="text-sm text-gray-500 dark:text-gray-400">
-				<b>Users:</b>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				labore et dolore magna aliqua.
-			</p>
+			<SessionExerciseVideo session={sessionData} updated={getSession} />
 		</TabItem>
-		<TabItem disabled={sessionData.rendered == false}>
+		<TabItem disabled={sessionData.exercise_videos_checked == false}>
 			<div slot="title" class="flex items-center gap-2">
-				{#if sessionData.exercise_videos_checked}
+				{#if sessionData.rendered}
 					<CheckOutline color="green" />
 				{:else}
 					<CloseOutline color="red" />

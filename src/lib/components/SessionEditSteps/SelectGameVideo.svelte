@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Card, Heading, Hr, Input, Label } from 'flowbite-svelte';
-	import { HeartOutline } from 'flowbite-svelte-icons';
+	import { HeartOutline, RocketOutline } from 'flowbite-svelte-icons';
 	import SessionVideoTabel from '$lib/components/SessionVideoTable.svelte';
 	import type { RecordModel } from 'pocketbase';
 	import { onMount } from 'svelte';
@@ -148,8 +148,8 @@
 </script>
 
 <div class="mb-5 flex items-baseline justify-baseline">
-	<HeartOutline color="red" />
-	<Heading tag="h4" class="text-gray-500">Game exercise footage</Heading>
+	<RocketOutline color="blue" />
+	<Heading tag="h4" class="text-gray-500">Gameplay footage</Heading>
 	<div class="flex items-center justify-center gap-x-2">
 		<Button
 			on:click={() => {
