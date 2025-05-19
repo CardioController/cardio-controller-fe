@@ -4,9 +4,15 @@
 	import SelectGameVideo from '$lib/components/SessionEditSteps/SelectGameVideo.svelte';
 	import SessionExercises from '$lib/components/SessionEditSteps/SessionExercises.svelte';
 	import SessionExerciseVideo from '$lib/components/SessionEditSteps/SessionExerciseVideo.svelte';
+	import SessionMarkRender from '$lib/components/SessionEditSteps/SessionMarkRender.svelte';
 	import { cc_pb, PB_COLLECTION_SESSIONS } from '$lib/pb-integrate';
 	import { Button, Heading, Hr, StepIndicator, TabItem, Tabs } from 'flowbite-svelte';
-	import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons';
+	import {
+		CheckOutline,
+		ClockOutline,
+		CloseOutline,
+		DotsHorizontalOutline
+	} from 'flowbite-svelte-icons';
 	import type { RecordModel } from 'pocketbase';
 	import { onMount } from 'svelte';
 
@@ -74,18 +80,18 @@
 		</TabItem>
 		<TabItem disabled={sessionData.exercise_videos_checked == false}>
 			<div slot="title" class="flex items-center gap-2">
-				{#if sessionData.rendered}
-					<CheckOutline color="green" />
-				{:else}
+				{#if ['', 'idle'].indexOf(sessionData.video_process_stage) > -1}
 					<CloseOutline color="red" />
+				{:else if sessionData.video_process_stage == 'in_queue'}
+					<DotsHorizontalOutline />
+				{:else if sessionData.video_process_stage == 'processing'}
+					<ClockOutline color="blue" />
+				{:else}
+					<CheckOutline color="green" />
 				{/if}
 				Render
 			</div>
-			<p class="text-sm text-gray-500 dark:text-gray-400">
-				<b>Users:</b>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				labore et dolore magna aliqua.
-			</p>
+			<SessionMarkRender session={sessionData} updated={getSession} />
 		</TabItem>
 	</Tabs>
 {/if}

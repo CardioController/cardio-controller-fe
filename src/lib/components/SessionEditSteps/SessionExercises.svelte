@@ -12,6 +12,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import { ChartPieOutline } from 'flowbite-svelte-icons';
 	import type { RecordModel } from 'pocketbase';
 	import { onMount } from 'svelte';
 
@@ -140,10 +141,13 @@
 					</TableBodyRow> -->
 				</TableBody>
 			</Table>
-			<Hr />
-			<div class="flex items-end justify-end">
-				<Button on:click={handleMarkAsChecked}>Mark as checked</Button>
-			</div>
+
+			{#if !session.exercises_checked}
+				<Hr />
+				<div class="flex items-end justify-end">
+					<Button on:click={handleMarkAsChecked}>Mark as checked</Button>
+				</div>
+			{/if}
 		{/if}
 	{/if}
 {/key}

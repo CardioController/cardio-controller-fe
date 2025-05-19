@@ -18,10 +18,15 @@
 			sort: '-created'
 		});
 	}
+
 	onMount(() => {
 		loadData();
 	});
 </script>
+
+<svelte:head>
+	<title>Cardio Controller</title>
+</svelte:head>
 
 <div class="grid grid-cols-1 gap-y-5 lg:grid-cols-4 lg:gap-5">
 	<Card>

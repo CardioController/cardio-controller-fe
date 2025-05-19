@@ -177,13 +177,14 @@
 				</div>
 			</Card>
 		</div>
+		{#if !session.exercise_videos_checked}
+			<Hr />
+			<div class="flex items-end justify-end">
+				<Button on:click={handleMarkAsChecked}>Mark as checked</Button>
+			</div>
+		{/if}
 	{/if}
 {/key}
-
-<Hr />
-<div class="flex items-end justify-end">
-	<Button on:click={handleMarkAsChecked}>Mark as checked</Button>
-</div>
 
 <SessionAddVideoModal
 	bind:open={showAddVideoModal}
